@@ -1,12 +1,12 @@
 <template>
   <Layout>
-    <form @submit="">
-      <label for="username" class="label">Username</label>
+    <form @submit="onLogin">
+      <label for="email" class="label">Email</label>
       <input
-        v-model="username"
-        v-bind="usernameAttrs"
-        id="username"
-        type="text"
+        v-model="email"
+        v-bind="emailAttrs"
+        id="email"
+        type="email"
         class="input"
       />
       <div class="error">{{ errors.username }}</div>
@@ -26,23 +26,25 @@
 
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import { loginSchema } from "@/features/auth/validation/login.schema";
+import {
+  loginSchema,
+  type LoginSchemaType,
+} from "@/features/auth/validation/login.schema";
 import Layout from "./Layout.vue";
+import { loginUser } from "@/api/auth.api";
 
-const { errors, handleSubmit, defineField } = useForm({
+const { errors, handleSubmit, defineField } = useForm<LoginSchemaType>({
   validationSchema: loginSchema,
 });
 
-// const onLogin = handleSubmit(async (values) => {
+const onLogin = handleSubmit(async (values) => {
+  try {
+    const data = await loginUser(values);
+    console.log(data.accessToken);
+  } catch (err) {}
+});
 
-//   try {
-//     await
-//   } catch (err) {
-
-//   }
-// });
-
-const [username, usernameAttrs] = defineField("username");
+const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
 </script>
 

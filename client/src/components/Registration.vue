@@ -1,12 +1,12 @@
 <template>
   <Layout>
-    <form @submit="">
-      <label for="username" class="label">Username</label>
+    <form @submit="onRegister">
+      <label for="email" class="label">Email</label>
       <input
-        v-model="username"
-        v-bind="usernameAttrs"
-        type="text"
-        id="username"
+        v-model="email"
+        v-bind="emailAttrs"
+        type="email"
+        id="email"
         class="input"
       />
       <div class="error">{{ errors.username }}</div>
@@ -36,22 +36,24 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import Layout from "./Layout.vue";
-import { registrationSchema } from "@/features/auth/validation/registration.schema";
+import {
+  registrationSchema,
+  type RegistrationSchemaType,
+} from "@/features/auth/validation/registration.schema";
+import { registerUser } from "@/api/auth.api";
 
-const { errors, handleSubmit, defineField } = useForm({
+const { errors, handleSubmit, defineField } = useForm<RegistrationSchemaType>({
   validationSchema: registrationSchema,
 });
 
-// const onRegister = handleSubmit(async (values) => {
+const onRegister = handleSubmit(async (values) => {
+  try {
+    const data = await registerUser(values);
+    console.log(data.message);
+  } catch (err) {}
+});
 
-//   try {
-//     await
-//   } catch (err) {
-
-//   }
-// });
-
-const [username, usernameAttrs] = defineField("username");
+const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
 const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
 </script>
