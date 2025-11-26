@@ -9,7 +9,7 @@
         type="email"
         class="input"
       />
-      <div class="error">{{ errors.username }}</div>
+      <div class="error">{{ errors.email }}</div>
       <label for="password" class="label">Password</label>
       <input
         v-model="password"
@@ -31,16 +31,21 @@ import {
   type LoginSchemaType,
 } from "@/features/auth/validation/login.schema";
 import Layout from "./Layout.vue";
-import { loginUser } from "@/api/auth.api";
+import { useAuthStore } from "../stores/useAuthStore";
+import { useRouter } from "vue-router";
+
+const auth = useAuthStore();
+const router = useRouter();
 
 const { errors, handleSubmit, defineField } = useForm<LoginSchemaType>({
   validationSchema: loginSchema,
 });
 
+//Дописать catch
 const onLogin = handleSubmit(async (values) => {
   try {
-    const data = await loginUser(values);
-    console.log(data.accessToken);
+    await auth.login(values);
+    router.push("/");
   } catch (err) {}
 });
 
