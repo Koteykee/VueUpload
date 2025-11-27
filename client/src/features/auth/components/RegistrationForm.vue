@@ -1,47 +1,44 @@
 <template>
-  <Layout>
-    <form @submit="onRegister">
-      <label for="email" class="label">Email</label>
-      <input
-        v-model="email"
-        v-bind="emailAttrs"
-        type="email"
-        id="email"
-        class="input"
-      />
-      <div class="error">{{ errors.email }}</div>
-      <label for="password" class="label">Password</label>
-      <input
-        v-model="password"
-        v-bind="passwordAttrs"
-        type="password"
-        id="password"
-        class="input"
-      />
-      <div class="error">{{ errors.password }}</div>
-      <label for="confirmPassword" class="label">Confirm password</label>
-      <input
-        v-model="confirmPassword"
-        v-bind="confirmPasswordAttrs"
-        type="password"
-        id="confirmPassword"
-        class="input"
-      />
-      <div class="error">{{ errors.confirmPassword }}</div>
-      <button type="submit" class="btn">Register</button>
-    </form>
-  </Layout>
+  <form @submit="onRegister">
+    <label for="email" class="label">Email</label>
+    <input
+      v-model="email"
+      v-bind="emailAttrs"
+      type="email"
+      id="email"
+      class="input"
+    />
+    <div class="error">{{ errors.email }}</div>
+    <label for="password" class="label">Password</label>
+    <input
+      v-model="password"
+      v-bind="passwordAttrs"
+      type="password"
+      id="password"
+      class="input"
+    />
+    <div class="error">{{ errors.password }}</div>
+    <label for="confirmPassword" class="label">Confirm password</label>
+    <input
+      v-model="confirmPassword"
+      v-bind="confirmPasswordAttrs"
+      type="password"
+      id="confirmPassword"
+      class="input"
+    />
+    <div class="error">{{ errors.confirmPassword }}</div>
+    <button type="submit" class="btn">Register</button>
+  </form>
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import { useForm } from "vee-validate";
-import Layout from "./Layout.vue";
+import { useAuthStore } from "../../../stores/useAuthStore";
 import {
   registrationSchema,
   type RegistrationSchemaType,
 } from "@/features/auth/validation/registration.schema";
-import { useAuthStore } from "../stores/useAuthStore";
-import { useRouter } from "vue-router";
 
 const auth = useAuthStore();
 const router = useRouter();
