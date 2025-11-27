@@ -13,6 +13,7 @@ export interface DecodedToken {
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<DecodedToken | null>(null);
   const accessToken = ref<string | null>(localStorage.getItem("accessToken"));
+  const isAuthenticated = ref(false);
 
   const decodeToken = (accessToken: string): DecodedToken | null => {
     try {
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   const login = async (values: LoginSchemaType) => {
     const data = await loginUser(values);
+    isAuthenticated.value = true;
 
     setToken(data.accessToken);
   };
@@ -53,8 +55,18 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = () => {
     user.value = null;
     accessToken.value = null;
+    isAuthenticated.value = false;
     localStorage.removeItem("accessToken");
   };
 
-  return { user, accessToken, decodeToken, setToken, login, register, logout };
+  return {
+    user,
+    accessToken,
+    isAuthenticated,
+    decodeToken,
+    setToken,
+    login,
+    register,
+    logout,
+  };
 });

@@ -6,22 +6,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useFileStore, type IFile } from "@/stores/useFileStore";
-import FileList from "../components/FileList.vue";
 import Layout from "@/components/Layout.vue";
+import FileList from "../components/FileList.vue";
 
 const file = useFileStore();
 const filesList = ref<IFile[] | null>();
 
 const loadFilesList = async () => {
   try {
-    filesList.value = await file.fetchPublicFiles();
+    filesList.value = await file.fetchUserFiles();
   } catch (error) {}
 };
 
-onMounted(() => {
-  loadFilesList();
+onMounted(async () => {
+  await loadFilesList();
 });
 </script>
 

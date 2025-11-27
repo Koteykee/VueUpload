@@ -8,7 +8,7 @@
       type="email"
       class="input"
     />
-    <div class="error">{{ errors.email }}</div>
+    <div v-if="errors.email" class="error">{{ errors.email }}</div>
     <label for="password" class="label">Password</label>
     <input
       v-model="password"
@@ -17,12 +17,14 @@
       type="password"
       class="input"
     />
-    <div class="error">{{ errors.password }}</div>
+    <div v-if="errors.password" class="error">{{ errors.password }}</div>
+    <p v-if="error" class="error">{{ error }}</p>
     <button type="submit" class="btn">Login</button>
   </form>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import { useAuthStore } from "../../../stores/useAuthStore";
@@ -30,20 +32,31 @@ import {
   loginSchema,
   type LoginSchemaType,
 } from "@/features/auth/validation/login.schema";
+import { isAxiosError } from "axios";
 
 const auth = useAuthStore();
 const router = useRouter();
+const error = ref("");
 
-const { errors, handleSubmit, defineField } = useForm<LoginSchemaType>({
-  validationSchema: loginSchema,
-});
+const { errors, handleSubmit, defineField, setErrors } =
+  useForm<LoginSchemaType>({
+    validationSchema: loginSchema,
+  });
 
-//Дописать catch
 const onLogin = handleSubmit(async (values) => {
   try {
     await auth.login(values);
     router.push("/public");
-  } catch (err) {}
+  } catch (err: any) {
+    if (isAxiosError(err)) {
+      const errorResponse = err.response?.data;
+      if (errorResponse.message) {
+        error.value = errorResponse.message;
+      } else if (errorResponse.errors) {
+        setErrors(errorResponse.errors);
+      }
+    } else console.log(err);
+  }
 });
 
 const [email, emailAttrs] = defineField("email");

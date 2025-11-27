@@ -4,7 +4,7 @@ import WelcomePage from "@/components/WelcomePage.vue";
 import LoginPage from "@/features/auth/pages/LoginPage.vue";
 import RegistrationPage from "@/features/auth/pages/RegistrationPage.vue";
 import PublicFilesPage from "@/features/files/pages/PublicFilesPage.vue";
-import MyFilesPage from "@/features/files/pages/MyFilesPage.vue";
+import UserFilesPage from "@/features/files/pages/UserFilesPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,9 +30,9 @@ const router = createRouter({
       component: PublicFilesPage,
     },
     {
-      path: "/my",
-      name: "My",
-      component: MyFilesPage,
+      path: "/user",
+      name: "User",
+      component: UserFilesPage,
     },
   ],
 });

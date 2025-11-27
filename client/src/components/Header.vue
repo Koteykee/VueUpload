@@ -7,17 +7,24 @@
       >
     </div>
     <div v-else class="wrapper">
-      <router-link to="/" class="nav-item">Main Page</router-link>
-      <div class="nav-item">My files</div>
-      <div @click="auth.logout" class="nav-item">Logout</div>
+      <router-link to="/public" class="nav-item">Main Page</router-link>
+      <router-link to="/user" class="nav-item">My files</router-link>
+      <div @click="handleLogout" class="nav-item">Logout</div>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const auth = useAuthStore();
+const router = useRouter();
+
+function handleLogout() {
+  auth.logout();
+  router.push("/");
+}
 </script>
 
 <style scoped>
