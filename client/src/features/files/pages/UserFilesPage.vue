@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <FileList v-if="filesList" :filesList="filesList" />
+    <FileList v-if="filesList.length" :filesList="filesList" />
     <p v-else>No files yet.</p>
   </Layout>
 </template>
@@ -12,16 +12,15 @@ import Layout from "@/components/Layout.vue";
 import FileList from "../components/FileList.vue";
 
 const file = useFileStore();
-const filesList = ref<IFile[] | null>();
-
-const loadFilesList = async () => {
-  try {
-    filesList.value = await file.fetchUserFiles();
-  } catch (error) {}
-};
+const filesList = ref<IFile[]>([]);
 
 onMounted(async () => {
-  await loadFilesList();
+  try {
+    const result = await file.fetchUserFiles();
+    filesList.value = result ?? [];
+  } catch (err) {
+    console.error("Не удалось загрузить файлы:", err);
+  }
 });
 </script>
 

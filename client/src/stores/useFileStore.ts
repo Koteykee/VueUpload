@@ -1,6 +1,10 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { getPublicFiles, getUserFiles } from "@/api/file.api";
+import {
+  getPublicFilePreview,
+  getPublicFiles,
+  getUserFiles,
+} from "@/api/file.api";
 
 export interface IFile {
   _id: string;
@@ -37,5 +41,14 @@ export const useFileStore = defineStore("file", () => {
     }
   };
 
-  return { file, fetchPublicFiles, fetchUserFiles };
+  const fetchPublicFilePreview = async (id: string) => {
+    try {
+      const data = await getPublicFilePreview(id);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return { file, fetchPublicFiles, fetchUserFiles, fetchPublicFilePreview };
 });

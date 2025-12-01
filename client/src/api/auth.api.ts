@@ -17,3 +17,8 @@ export const registerUser = async (registerData: RegistrationSchemaType) => {
   );
   return data;
 };
+
+export const refreshToken = async () => {
+  const { data } = await Api.get<{ accessToken: string }>("/auth/refresh");
+  return data;
+};

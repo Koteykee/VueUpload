@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { loginUser, registerUser } from "@/api/auth.api";
+import { loginUser, refreshToken, registerUser } from "@/api/auth.api";
 import type { LoginSchemaType } from "@/features/auth/validation/login.schema";
 import { jwtDecode } from "jwt-decode";
 import type { RegistrationSchemaType } from "@/features/auth/validation/registration.schema";
@@ -59,6 +59,18 @@ export const useAuthStore = defineStore("auth", () => {
     localStorage.removeItem("accessToken");
   };
 
+  const refresh = async () => {
+    try {
+      const data = await refreshToken();
+      setToken(data.accessToken);
+      return data;
+    } catch (err) {
+      logout();
+      console.log(err);
+      throw err;
+    }
+  };
+
   return {
     user,
     accessToken,
@@ -68,5 +80,6 @@ export const useAuthStore = defineStore("auth", () => {
     login,
     register,
     logout,
+    refresh,
   };
 });
