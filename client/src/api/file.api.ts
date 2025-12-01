@@ -17,3 +17,20 @@ export const getPublicFilePreview = async (id: string) => {
   );
   return data.files;
 };
+
+export const getUserFilePreview = async (id: string) => {
+  const { data } = await Api.get<{ files: IFile[] }>(`/files/preview/${id}`);
+  return data.files;
+};
+
+export const uploadFile = async (file: File): Promise<IFile> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const { data } = await Api.post<{
+    message: string;
+    file: IFile;
+  }>("/files/upload", formData);
+
+  return data.file;
+};

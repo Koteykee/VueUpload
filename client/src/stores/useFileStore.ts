@@ -3,7 +3,9 @@ import { defineStore } from "pinia";
 import {
   getPublicFilePreview,
   getPublicFiles,
+  getUserFilePreview,
   getUserFiles,
+  uploadFile,
 } from "@/api/file.api";
 
 export interface IFile {
@@ -50,5 +52,30 @@ export const useFileStore = defineStore("file", () => {
     }
   };
 
-  return { file, fetchPublicFiles, fetchUserFiles, fetchPublicFilePreview };
+  const fetchUserFilePreview = async (id: string) => {
+    try {
+      const data = await getUserFilePreview(id);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchNewFile = async (file: File) => {
+    try {
+      const data = await uploadFile(file);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return {
+    file,
+    fetchPublicFiles,
+    fetchUserFiles,
+    fetchPublicFilePreview,
+    fetchUserFilePreview,
+    fetchNewFile,
+  };
 });

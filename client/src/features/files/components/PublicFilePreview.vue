@@ -18,8 +18,6 @@ const publicFile = ref();
 onMounted(async () => {
   try {
     const result = await store.fetchPublicFilePreview(file._id);
-    console.log(file._id);
-    console.log(result);
     publicFile.value = result ?? null;
   } catch (err) {
     console.error("Не удалось загрузить файлы:", err);
