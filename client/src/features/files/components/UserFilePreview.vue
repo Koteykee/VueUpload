@@ -1,11 +1,12 @@
 <template>
   <div>
-    <img src="" alt="Picture" />
+    <img v-if="imageUrl" :src="imageUrl" alt="Picture" />
     <div>
+      <button>Edit file</button>
       <button @click="downloadFile(file._id, file.originalname)">
-        Скачать файл
+        Download file
       </button>
-      <button @click="deleteFile(file._id)">Удалить файл</button>
+      <button @click="deleteFile(file._id)">Delete file</button>
     </div>
   </div>
 </template>
@@ -16,16 +17,19 @@ import { useFileStore, type IFile } from "@/stores/useFileStore";
 
 const { file } = defineProps<{ file: IFile }>();
 const store = useFileStore();
-const publicFile = ref();
+const imageUrl = ref<string | null>(null);
 
 const emit = defineEmits(["close", "uploaded"]);
 
 onMounted(async () => {
   try {
-    const result = await store.fetchUserFilePreview(file._id);
-    publicFile.value = result ?? null;
+    const blob = await store.fetchUserFilePreview(file._id);
+
+    if (blob) {
+      imageUrl.value = URL.createObjectURL(blob);
+    }
   } catch (err) {
-    console.error("Не удалось загрузить файлы:", err);
+    console.error("Unable to load preview:", err);
   }
 });
 

@@ -20,7 +20,7 @@ onMounted(async () => {
     const result = await store.fetchPublicFilePreview(file._id);
     publicFile.value = result ?? null;
   } catch (err) {
-    console.error("Не удалось загрузить файлы:", err);
+    console.error("Unable to load files:", err);
   }
 });
 

@@ -6,7 +6,7 @@
       @click="$emit('select', file)"
       class="file"
     >
-      <img src="" alt="Picture" />
+      <img :src="previews[file._id]" alt="Picture" />
       <p>{{ file.originalname }}</p>
     </li>
   </ul>
@@ -20,14 +20,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeUnmount, watch, ref } from "vue";
 import { useFileStore, type IFile } from "@/stores/useFileStore";
 
 const { filesList } = defineProps<{ filesList: IFile[] }>();
 
 const emit = defineEmits(["select", "uploaded"]);
 
+const previews = ref<Record<string, string>>({});
 const fileStore = useFileStore();
+
+const clearPreviews = () => {
+  Object.values(previews.value).forEach((url) => URL.revokeObjectURL(url));
+  previews.value = {};
+};
+
+watch(
+  () => filesList,
+  async (newList) => {
+    clearPreviews();
+
+    for (const file of newList) {
+      try {
+        const blob = await fileStore.fetchUserFilePreview(file._id);
+        if (blob) {
+          previews.value[file._id] = URL.createObjectURL(blob);
+        }
+      } catch (err) {
+        console.log("Preview load error:", err);
+      }
+    }
+  },
+  { immediate: true }
+);
+
+onBeforeUnmount(() => {
+  clearPreviews();
+});
 
 const selectedFile = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);

@@ -20,7 +20,7 @@ export const useAuthStore = defineStore("auth", () => {
       const decoded = jwtDecode<DecodedToken>(accessToken);
       return { email: decoded.email, userId: decoded.userId };
     } catch (err) {
-      console.error("Ошибка при декодировании токена:", err);
+      console.error("Token decoding error:", err);
       logout();
       return null;
     }

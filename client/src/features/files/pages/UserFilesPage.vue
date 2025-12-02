@@ -35,7 +35,7 @@ onMounted(async () => {
   try {
     refreshFiles();
   } catch (err) {
-    console.error("Не удалось загрузить файлы:", err);
+    console.error("Unable to load files:", err);
   }
 });
 

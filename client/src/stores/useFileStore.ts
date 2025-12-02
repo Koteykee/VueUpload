@@ -7,7 +7,9 @@ import {
   getPublicFiles,
   getUserFilePreview,
   getUserFiles,
+  patchFile,
   uploadFile,
+  type PatchFile,
 } from "@/api/file.api";
 
 export interface IFile {
@@ -22,6 +24,26 @@ export interface IFile {
   downloads: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface UploadedFile {
+  message: string;
+  file: IFile;
+}
+
+export interface PatchedFile {
+  _id: string;
+  user: string;
+  filename: string;
+  originalname: string;
+  path: string;
+  mimetype: string;
+  size: number;
+  isPublic: boolean;
+  downloads: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 export const useFileStore = defineStore("file", () => {
@@ -99,6 +121,15 @@ export const useFileStore = defineStore("file", () => {
     }
   };
 
+  const fetchPatchFile = async (id: string, payload: PatchFile) => {
+    try {
+      const data = await patchFile(id, payload);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return {
     file,
     fetchPublicFiles,
@@ -108,5 +139,6 @@ export const useFileStore = defineStore("file", () => {
     fetchUploadFile,
     fetchDownloadFile,
     fetchDeleteFile,
+    fetchPatchFile,
   };
 });
