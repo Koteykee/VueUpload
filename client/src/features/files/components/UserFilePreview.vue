@@ -2,7 +2,9 @@
   <div>
     <img src="" alt="Picture" />
     <div>
-      <button @click="download">Скачать файл</button>
+      <button @click="downloadFile(file._id, file.originalname)">
+        Скачать файл
+      </button>
     </div>
   </div>
 </template>
@@ -24,5 +26,7 @@ onMounted(async () => {
   }
 });
 
-const download = () => {};
+const downloadFile = async (id: string, filename: string) => {
+  await store.fetchDownloadFile(id, filename);
+};
 </script>

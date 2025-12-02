@@ -1,24 +1,24 @@
 import type { IFile } from "@/stores/useFileStore";
 import { Api } from "./api";
 
-export const getPublicFiles = async () => {
+export const getPublicFiles = async (): Promise<IFile[]> => {
   const { data } = await Api.get<{ files: IFile[] }>("/files/public");
   return data.files;
 };
 
-export const getUserFiles = async () => {
+export const getUserFiles = async (): Promise<IFile[]> => {
   const { data } = await Api.get<{ files: IFile[] }>("/files/user");
   return data.files;
 };
 
-export const getPublicFilePreview = async (id: string) => {
+export const getPublicFilePreview = async (id: string): Promise<IFile[]> => {
   const { data } = await Api.get<{ files: IFile[] }>(
     `/files/public/preview/${id}`
   );
   return data.files;
 };
 
-export const getUserFilePreview = async (id: string) => {
+export const getUserFilePreview = async (id: string): Promise<IFile[]> => {
   const { data } = await Api.get<{ files: IFile[] }>(`/files/preview/${id}`);
   return data.files;
 };
@@ -33,4 +33,11 @@ export const uploadFile = async (file: File): Promise<IFile> => {
   }>("/files/upload", formData);
 
   return data.file;
+};
+
+export const downloadFile = async (id: string): Promise<Blob> => {
+  const { data } = await Api.get<Blob>(`/files/download/${id}`, {
+    responseType: "blob",
+  });
+  return data;
 };

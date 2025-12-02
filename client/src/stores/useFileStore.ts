@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import {
+  downloadFile,
   getPublicFilePreview,
   getPublicFiles,
   getUserFilePreview,
@@ -61,10 +62,28 @@ export const useFileStore = defineStore("file", () => {
     }
   };
 
-  const fetchNewFile = async (file: File) => {
+  const fetchUploadFile = async (file: File) => {
     try {
       const data = await uploadFile(file);
       return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const saveFile = (blob: Blob, filename: string) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const fetchDownloadFile = async (id: string, filename: string) => {
+    try {
+      const blob = await downloadFile(id);
+      saveFile(blob, filename);
     } catch (err) {
       console.log(err);
     }
@@ -76,6 +95,7 @@ export const useFileStore = defineStore("file", () => {
     fetchUserFiles,
     fetchPublicFilePreview,
     fetchUserFilePreview,
-    fetchNewFile,
+    fetchUploadFile,
+    fetchDownloadFile,
   };
 });

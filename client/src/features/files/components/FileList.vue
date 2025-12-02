@@ -47,7 +47,7 @@ const onFileChange = (event: Event) => {
 const handleUpload = async () => {
   if (!selectedFile.value) return;
 
-  await fileStore.fetchNewFile(selectedFile.value);
+  await fileStore.fetchUploadFile(selectedFile.value);
 
   emit("uploaded");
 };

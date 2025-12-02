@@ -2,7 +2,7 @@
   <div>
     <img src="" alt="Picture" />
     <div>
-      <button @click="download">Скачать файл</button>
+      <button @click="downloadFile">Скачать файл</button>
     </div>
   </div>
 </template>
@@ -24,5 +24,5 @@ onMounted(async () => {
   }
 });
 
-const download = () => {};
+const downloadFile = () => {};
 </script>

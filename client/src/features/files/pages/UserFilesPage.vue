@@ -32,8 +32,7 @@ const selectedFile = ref<IFile | null>(null);
 
 onMounted(async () => {
   try {
-    const result = await file.fetchUserFiles();
-    filesList.value = result ?? [];
+    refreshFiles();
   } catch (err) {
     console.error("Не удалось загрузить файлы:", err);
   }
