@@ -11,6 +11,7 @@
         v-if="selectedFile"
         :file="selectedFile"
         @close="isModalOpen = false"
+        @uploaded="refreshFiles"
       />
     </Modal>
   </Layout>

@@ -41,3 +41,8 @@ export const downloadFile = async (id: string): Promise<Blob> => {
   });
   return data;
 };
+
+export const deleteFile = async (id: string): Promise<{ message: string }> => {
+  const { data } = await Api.delete<{ message: string }>(`/files/delete/${id}`);
+  return data;
+};

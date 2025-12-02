@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import {
+  deleteFile,
   downloadFile,
   getPublicFilePreview,
   getPublicFiles,
@@ -89,6 +90,15 @@ export const useFileStore = defineStore("file", () => {
     }
   };
 
+  const fetchDeleteFile = async (id: string) => {
+    try {
+      const data = await deleteFile(id);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return {
     file,
     fetchPublicFiles,
@@ -97,5 +107,6 @@ export const useFileStore = defineStore("file", () => {
     fetchUserFilePreview,
     fetchUploadFile,
     fetchDownloadFile,
+    fetchDeleteFile,
   };
 });
