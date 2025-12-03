@@ -20,7 +20,7 @@ const close = () => emit("update:modelValue", false);
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
-  background-color: rgb(236, 250, 215);
+  background-color: rgb(212, 230, 186);
   width: 80%;
   max-width: 1200px;
   min-width: 300px;

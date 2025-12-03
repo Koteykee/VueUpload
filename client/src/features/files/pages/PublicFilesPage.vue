@@ -5,7 +5,7 @@
       :filesList="filesList"
       @select="openModal"
     />
-    <p v-else>No files yet.</p>
+    <p v-else class="text">No files yet.</p>
     <Modal v-model="isModalOpen">
       <PublicFilePreview
         v-if="selectedFile"
@@ -45,4 +45,9 @@ const openModal = (file: IFile) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.text {
+  font-size: 24px;
+  margin: 20px;
+}
+</style>
