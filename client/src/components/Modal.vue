@@ -21,11 +21,15 @@ const close = () => emit("update:modelValue", false);
   transform: translate(-50%, -50%);
   z-index: 20;
   background-color: rgb(212, 230, 186);
-  width: 80%;
-  max-width: 1200px;
-  min-width: 300px;
+  max-width: 80%;
+  max-height: 90%;
+  min-width: 40%;
+  min-height: 50%;
   padding: 20px;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .darkness {

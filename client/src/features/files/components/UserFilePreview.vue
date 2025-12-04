@@ -9,18 +9,31 @@
       <form v-else @submit.prevent="saveEdit">
         <div>
           <label for="name" class="text">Name: </label>
-          <input v-model="name" v-bind="nameAttrs" id="name" type="text" />
+          <input
+            v-model="name"
+            v-bind="nameAttrs"
+            id="name"
+            type="text"
+            class="input"
+          />
           <div class="error">{{ errors.name }}</div>
         </div>
         <div>
           <label for="public" class="text">Private: </label>
-          <select v-model="isPublic" v-bind="publicAttrs" id="public">
+          <select
+            v-model="isPublic"
+            v-bind="publicAttrs"
+            id="public"
+            class="select"
+          >
             <option :value="true">Yes</option>
             <option :value="false">No</option>
           </select>
           <div class="error">{{ errors.isPublic }}</div>
         </div>
-        <button type="submit" class="btn save">Save</button>
+        <button type="submit" class="btn save" :disabled="isDisabled">
+          Save
+        </button>
       </form>
       <p>Type: {{ file.mimetype }}</p>
       <p>Size: {{ formatSize(file.size) }}</p>
@@ -45,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useFileStore, type IFile } from "@/stores/useFileStore";
 import type { PatchFile } from "@/api/file.api";
 import { useForm } from "vee-validate";
@@ -147,15 +160,30 @@ const saveEdit = handleSubmit(async (values) => {
 });
 
 const downloadFile = async (id: string, filename: string) => {
-  await store.fetchDownloadFile(id, filename);
+  try {
+    await store.fetchDownloadFile(id, filename);
+  } catch (err) {
+    console.error("Unable to download file:", err);
+  }
 };
 
 const deleteFile = async (id: string) => {
-  await store.fetchDeleteFile(id);
+  const confirmed = confirm("Do you really want to delete this file?");
+  if (!confirmed) return;
 
-  emit("uploaded");
-  emit("close");
+  try {
+    await store.fetchDeleteFile(id);
+
+    emit("uploaded");
+    emit("close");
+  } catch (err) {
+    console.error("Unable to delete file:", err);
+  }
 };
+
+const isDisabled = computed(() => {
+  return Object.keys(errors.value).length > 0;
+});
 </script>
 
 <style scoped>
@@ -166,10 +194,11 @@ const deleteFile = async (id: string) => {
   justify-content: center;
   text-align: center;
   gap: 20px;
+  flex: 1;
 }
 
 .img {
-  max-width: 1100px;
+  max-width: 100%;
 }
 
 .btn-wrapper {
@@ -187,6 +216,7 @@ const deleteFile = async (id: string) => {
 
 .save {
   background-color: #78bb8f;
+  margin-bottom: 4px;
 }
 
 .edit {
@@ -205,7 +235,24 @@ const deleteFile = async (id: string) => {
   filter: brightness(0.9);
 }
 
+.btn:disabled {
+  filter: brightness(0.7);
+  cursor: not-allowed;
+}
+
 .error {
   color: rgb(230, 40, 40);
+  margin-top: 4px;
+}
+
+.input {
+  width: 300px;
+  padding: 4px;
+}
+
+.select {
+  padding: 4px;
+  margin: 4px 0;
+  cursor: pointer;
 }
 </style>

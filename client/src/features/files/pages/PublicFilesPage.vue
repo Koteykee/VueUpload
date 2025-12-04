@@ -3,6 +3,7 @@
     <FileList
       v-if="filesList.length"
       :filesList="filesList"
+      :isUserPage="false"
       @select="openModal"
     />
     <p v-else class="text">No files yet.</p>

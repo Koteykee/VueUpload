@@ -28,12 +28,12 @@
     />
     <div class="error">{{ errors.confirmPassword }}</div>
     <p v-if="error" class="error">{{ error }}</p>
-    <button type="submit" class="btn">Register</button>
+    <button type="submit" class="btn" :disabled="isDisabled">Register</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import { useAuthStore } from "../../../stores/useAuthStore";
@@ -47,7 +47,7 @@ const auth = useAuthStore();
 const router = useRouter();
 const error = ref("");
 
-const { errors, handleSubmit, defineField, setErrors } =
+const { errors, handleSubmit, defineField, setErrors, isSubmitting } =
   useForm<RegistrationSchemaType>({
     validationSchema: registrationSchema,
   });
@@ -71,6 +71,10 @@ const onRegister = handleSubmit(async (values) => {
 const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
 const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
+
+const isDisabled = computed(() => {
+  return isSubmitting.value || Object.keys(errors.value).length > 0;
+});
 </script>
 
 <style scoped>

@@ -11,7 +11,7 @@
       </div>
       <p class="name">{{ file.originalname }}</p>
     </li>
-    <li class="file add-file" @click="openFileDialog">
+    <li v-if="isUserPage" class="file add-file" @click="openFileDialog">
       <span>Add file</span>
     </li>
   </ul>
@@ -27,7 +27,10 @@
 import { onBeforeUnmount, watch, ref } from "vue";
 import { useFileStore, type IFile } from "@/stores/useFileStore";
 
-const { filesList } = defineProps<{ filesList: IFile[] }>();
+const { filesList, isUserPage } = defineProps<{
+  filesList: IFile[];
+  isUserPage: boolean;
+}>();
 
 const emit = defineEmits(["select", "uploaded"]);
 

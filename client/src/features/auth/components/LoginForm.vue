@@ -19,12 +19,12 @@
     />
     <div v-if="errors.password" class="error">{{ errors.password }}</div>
     <p v-if="error" class="error">{{ error }}</p>
-    <button type="submit" class="btn">Login</button>
+    <button type="submit" class="btn" :disabled="isDisabled">Login</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useForm } from "vee-validate";
 import { useAuthStore } from "../../../stores/useAuthStore";
@@ -38,7 +38,7 @@ const auth = useAuthStore();
 const router = useRouter();
 const error = ref("");
 
-const { errors, handleSubmit, defineField, setErrors } =
+const { errors, handleSubmit, defineField, setErrors, isSubmitting } =
   useForm<LoginSchemaType>({
     validationSchema: loginSchema,
   });
@@ -61,6 +61,10 @@ const onLogin = handleSubmit(async (values) => {
 
 const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
+
+const isDisabled = computed(() => {
+  return isSubmitting.value || Object.keys(errors.value).length > 0;
+});
 </script>
 
 <style scoped>
