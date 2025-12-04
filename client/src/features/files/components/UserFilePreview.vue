@@ -2,21 +2,26 @@
   <div class="wrapper">
     <img v-if="imageUrl" :src="imageUrl" alt="Picture" class="img" />
     <div>
-      <p>
-        Name:
-        <span v-if="!isEditing">{{ editableFile.originalname }}</span>
-        <input v-else v-model="editableFile.originalname" />
-      </p>
-      <p>
-        Private:
-        <span v-if="!isEditing">{{
-          editableFile.isPublic ? "Yes" : "No"
-        }}</span>
-        <select v-else v-model="editableFile.isPublic">
-          <option :value="true">Yes</option>
-          <option :value="false">No</option>
-        </select>
-      </p>
+      <div v-if="!isEditing">
+        <p>Name: {{ file.originalname }}</p>
+        <p>Private: {{ file.isPublic ? "Yes" : "No" }}</p>
+      </div>
+      <form v-else @submit.prevent="saveEdit">
+        <div>
+          <label for="name" class="text">Name: </label>
+          <input v-model="name" v-bind="nameAttrs" id="name" type="text" />
+          <div class="error">{{ errors.name }}</div>
+        </div>
+        <div>
+          <label for="public" class="text">Private: </label>
+          <select v-model="isPublic" v-bind="publicAttrs" id="public">
+            <option :value="true">Yes</option>
+            <option :value="false">No</option>
+          </select>
+          <div class="error">{{ errors.isPublic }}</div>
+        </div>
+        <button type="submit" class="btn save">Save</button>
+      </form>
       <p>Type: {{ file.mimetype }}</p>
       <p>Size: {{ formatSize(file.size) }}</p>
       <p>Uploaded: {{ formatDate(file.createdAt) }}</p>
@@ -24,7 +29,7 @@
     </div>
     <div class="btn-wrapper">
       <button @click="toggleEdit" class="btn edit">
-        {{ isEditing ? "Save" : "Edit file" }}
+        {{ isEditing ? "Cancel" : "Edit file" }}
       </button>
       <button
         @click="downloadFile(file._id, file.originalname)"
@@ -40,16 +45,27 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useFileStore, type IFile } from "@/stores/useFileStore";
 import type { PatchFile } from "@/api/file.api";
+import { useForm } from "vee-validate";
+import { editSchema } from "../validation/edit.schema";
 
 const { file } = defineProps<{ file: IFile }>();
 const store = useFileStore();
 const imageUrl = ref<string | null>(null);
 const isEditing = ref(false);
 
-const editableFile = reactive({ ...file });
+const { errors, handleSubmit, defineField, resetForm } = useForm({
+  validationSchema: editSchema,
+  initialValues: {
+    name: file.originalname,
+    isPublic: file.isPublic,
+  },
+});
+
+const [name, nameAttrs] = defineField("name");
+const [isPublic, publicAttrs] = defineField("isPublic");
 
 const formatSize = (bytes: number) => {
   return (bytes / 1024).toFixed(1) + " KB";
@@ -88,25 +104,47 @@ onBeforeUnmount(() => {
   }
 });
 
+watch(
+  () => file,
+  (newFile) => {
+    resetForm({
+      values: {
+        name: newFile.originalname,
+        isPublic: newFile.isPublic,
+      },
+    });
+  },
+  { deep: true }
+);
+
 const toggleEdit = async () => {
-  if (isEditing.value) {
-    const payload: PatchFile = {};
-    if (editableFile.originalname !== file.originalname) {
-      payload.originalname = editableFile.originalname;
-    }
-    if (editableFile.isPublic !== file.isPublic) {
-      payload.isPublic = editableFile.isPublic;
-    }
-
-    if (Object.keys(payload).length > 0) {
-      await store.fetchPatchFile(editableFile._id, payload);
-
-      emit("uploaded");
-    }
-  }
+  if (isEditing.value) resetForm();
 
   isEditing.value = !isEditing.value;
 };
+
+const saveEdit = handleSubmit(async (values) => {
+  const payload: PatchFile = {};
+
+  if (values.name !== file.originalname) {
+    payload.originalname = values.name;
+  }
+  if (values.isPublic !== file.isPublic) {
+    payload.isPublic = values.isPublic;
+  }
+
+  if (Object.keys(payload).length > 0) {
+    try {
+      await store.fetchPatchFile(file._id, payload);
+
+      emit("uploaded");
+    } catch (err) {
+      console.error("Unable to edit file:", err);
+    }
+  }
+
+  toggleEdit();
+});
 
 const downloadFile = async (id: string, filename: string) => {
   await store.fetchDownloadFile(id, filename);
@@ -147,6 +185,10 @@ const deleteFile = async (id: string) => {
   cursor: pointer;
 }
 
+.save {
+  background-color: #78bb8f;
+}
+
 .edit {
   background-color: #b6c46a;
 }
@@ -161,5 +203,9 @@ const deleteFile = async (id: string) => {
 
 .btn:hover {
   filter: brightness(0.9);
+}
+
+.error {
+  color: rgb(230, 40, 40);
 }
 </style>

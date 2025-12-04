@@ -26,7 +26,7 @@ import FileList from "../components/FileList.vue";
 import Modal from "@/components/Modal.vue";
 import UserFilePreview from "../components/UserFilePreview.vue";
 
-const file = useFileStore();
+const fileStore = useFileStore();
 const filesList = ref<IFile[]>([]);
 const isModalOpen = ref(false);
 const selectedFile = ref<IFile | null>(null);
@@ -45,8 +45,17 @@ const openModal = (file: IFile) => {
 };
 
 const refreshFiles = async () => {
-  const result = await file.fetchUserFiles();
+  const result = await fileStore.fetchUserFiles();
   filesList.value = result ?? [];
+
+  if (selectedFile.value) {
+    const updated = filesList.value.find(
+      (file) => file._id === selectedFile.value!._id
+    );
+    if (updated) {
+      selectedFile.value = updated;
+    }
+  }
 };
 </script>
 
