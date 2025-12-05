@@ -1,35 +1,39 @@
 <template>
-  <form @submit="onRegister">
-    <label for="email" class="label">Email</label>
-    <input
-      v-model="email"
-      v-bind="emailAttrs"
-      type="email"
-      id="email"
-      class="input"
-    />
-    <div class="error">{{ errors.email }}</div>
-    <label for="password" class="label">Password</label>
-    <input
-      v-model="password"
-      v-bind="passwordAttrs"
-      type="password"
-      id="password"
-      class="input"
-    />
-    <div class="error">{{ errors.password }}</div>
-    <label for="confirmPassword" class="label">Confirm password</label>
-    <input
-      v-model="confirmPassword"
-      v-bind="confirmPasswordAttrs"
-      type="password"
-      id="confirmPassword"
-      class="input"
-    />
-    <div class="error">{{ errors.confirmPassword }}</div>
-    <p v-if="error" class="error">{{ error }}</p>
-    <button type="submit" class="btn" :disabled="isDisabled">Register</button>
-  </form>
+  <div class="wrapper">
+    <form @submit="onRegister">
+      <label for="email" class="label">Email</label>
+      <input
+        v-model="email"
+        v-bind="emailAttrs"
+        type="email"
+        id="email"
+        class="input"
+      />
+      <div v-if="errors.email" class="error">{{ errors.email }}</div>
+      <label for="password" class="label">Password</label>
+      <input
+        v-model="password"
+        v-bind="passwordAttrs"
+        type="password"
+        id="password"
+        class="input"
+      />
+      <div v-if="errors.password" class="error">{{ errors.password }}</div>
+      <label for="confirmPassword" class="label">Confirm password</label>
+      <input
+        v-model="confirmPassword"
+        v-bind="confirmPasswordAttrs"
+        type="password"
+        id="confirmPassword"
+        class="input"
+      />
+      <div v-if="errors.confirmPassword" class="error">
+        {{ errors.confirmPassword }}
+      </div>
+      <p v-if="error" class="error">{{ error }}</p>
+      <button type="submit" class="btn" :disabled="isDisabled">Register</button>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -78,6 +82,12 @@ const isDisabled = computed(() => {
 </script>
 
 <style scoped>
+.wrapper {
+  margin: 20px auto;
+  width: 100%;
+  min-width: 300px;
+}
+
 form {
   display: flex;
   flex-direction: column;

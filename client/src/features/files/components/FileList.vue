@@ -96,6 +96,7 @@ const handleUpload = async () => {
   flex-wrap: wrap;
   gap: 20px;
   list-style: none;
+  margin: 0 20px;
 }
 
 .file {

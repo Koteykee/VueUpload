@@ -34,7 +34,27 @@ const router = createRouter({
       name: "User",
       component: UserFilesPage,
     },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: "/",
+    },
   ],
+});
+
+const protectedRoutes = ["User", "Public"];
+
+router.beforeEach((to, from, next) => {
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (
+    typeof to.name === "string" &&
+    protectedRoutes.includes(to.name) &&
+    !accessToken
+  ) {
+    return next("/");
+  }
+
+  next();
 });
 
 export default router;

@@ -1,26 +1,28 @@
 <template>
-  <form @submit="onLogin">
-    <label for="email" class="label">Email</label>
-    <input
-      v-model="email"
-      v-bind="emailAttrs"
-      id="email"
-      type="email"
-      class="input"
-    />
-    <div v-if="errors.email" class="error">{{ errors.email }}</div>
-    <label for="password" class="label">Password</label>
-    <input
-      v-model="password"
-      v-bind="passwordAttrs"
-      id="password"
-      type="password"
-      class="input"
-    />
-    <div v-if="errors.password" class="error">{{ errors.password }}</div>
-    <p v-if="error" class="error">{{ error }}</p>
-    <button type="submit" class="btn" :disabled="isDisabled">Login</button>
-  </form>
+  <div class="wrapper">
+    <form @submit="onLogin">
+      <label for="email" class="label">Email</label>
+      <input
+        v-model="email"
+        v-bind="emailAttrs"
+        id="email"
+        type="email"
+        class="input"
+      />
+      <div v-if="errors.email" class="error">{{ errors.email }}</div>
+      <label for="password" class="label">Password</label>
+      <input
+        v-model="password"
+        v-bind="passwordAttrs"
+        id="password"
+        type="password"
+        class="input"
+      />
+      <div v-if="errors.password" class="error">{{ errors.password }}</div>
+      <p v-if="error" class="error">{{ error }}</p>
+      <button type="submit" class="btn" :disabled="isDisabled">Login</button>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -68,11 +70,16 @@ const isDisabled = computed(() => {
 </script>
 
 <style scoped>
+.wrapper {
+  margin: 20px auto;
+  width: 100%;
+  min-width: 300px;
+}
+
 form {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 100%;
 }
 
 .label {

@@ -1,9 +1,9 @@
 <template>
   <Layout>
-    <h1 class="title" v-if="!auth.user">
+    <h1 v-if="!auth.user" class="title">
       Hello! Please login to upload a picture!
     </h1>
-    <h1 v-else>You are logged in as {{ auth.user.email }}</h1>
+    <h1 v-else class="title">You are logged in as {{ auth.user.email }}</h1>
   </Layout>
 </template>
 
