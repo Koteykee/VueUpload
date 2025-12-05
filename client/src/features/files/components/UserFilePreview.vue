@@ -4,11 +4,11 @@
     <div>
       <div v-if="!isEditing">
         <p>Name: {{ file.originalname }}</p>
-        <p>Private: {{ file.isPublic ? "Yes" : "No" }}</p>
+        <p>Private: {{ file.isPublic ? "No" : "Yes" }}</p>
       </div>
       <form v-else @submit.prevent="saveEdit">
         <div>
-          <label for="name" class="text">Name: </label>
+          <label for="name">Name: </label>
           <input
             v-model="name"
             v-bind="nameAttrs"
@@ -19,7 +19,7 @@
           <div class="error">{{ errors.name }}</div>
         </div>
         <div>
-          <label for="public" class="text">Private: </label>
+          <label for="public">Private: </label>
           <select
             v-model="isPublic"
             v-bind="publicAttrs"
@@ -65,7 +65,7 @@ import { useForm } from "vee-validate";
 import { editSchema } from "../validation/edit.schema";
 
 const { file } = defineProps<{ file: IFile }>();
-const store = useFileStore();
+const fileStore = useFileStore();
 const imageUrl = ref<string | null>(null);
 const isEditing = ref(false);
 
@@ -101,7 +101,7 @@ const emit = defineEmits(["close", "uploaded"]);
 
 onMounted(async () => {
   try {
-    const blob = await store.fetchUserFilePreview(file._id);
+    const blob = await fileStore.fetchUserFilePreview(file._id);
 
     if (blob) {
       imageUrl.value = URL.createObjectURL(blob);
@@ -148,7 +148,7 @@ const saveEdit = handleSubmit(async (values) => {
 
   if (Object.keys(payload).length > 0) {
     try {
-      await store.fetchPatchFile(file._id, payload);
+      await fileStore.fetchPatchFile(file._id, payload);
 
       emit("uploaded");
     } catch (err) {
@@ -161,7 +161,7 @@ const saveEdit = handleSubmit(async (values) => {
 
 const downloadFile = async (id: string, filename: string) => {
   try {
-    await store.fetchDownloadFile(id, filename);
+    await fileStore.fetchDownloadFile(id, filename);
   } catch (err) {
     console.error("Unable to download file:", err);
   }
@@ -172,7 +172,7 @@ const deleteFile = async (id: string) => {
   if (!confirmed) return;
 
   try {
-    await store.fetchDeleteFile(id);
+    await fileStore.fetchDeleteFile(id);
 
     emit("uploaded");
     emit("close");

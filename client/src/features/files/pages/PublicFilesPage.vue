@@ -1,12 +1,7 @@
 <template>
   <Layout>
-    <FileList
-      v-if="filesList.length"
-      :filesList="filesList"
-      :isUserPage="false"
-      @select="openModal"
-    />
-    <p v-else class="text">No files yet.</p>
+    <p v-if="filesList.length === 0" class="text">No files yet.</p>
+    <FileList :filesList="filesList" :isUserPage="false" @select="openModal" />
     <Modal v-model="isModalOpen">
       <PublicFilePreview
         v-if="selectedFile"
@@ -26,14 +21,14 @@ import FileList from "../components/FileList.vue";
 import Modal from "@/components/Modal.vue";
 import PublicFilePreview from "../components/PublicFilePreview.vue";
 
-const file = useFileStore();
+const fileStore = useFileStore();
 const filesList = ref<IFile[]>([]);
 const isModalOpen = ref(false);
 const selectedFile = ref<IFile | null>(null);
 
 onMounted(async () => {
   try {
-    const result = await file.fetchPublicFiles();
+    const result = await fileStore.fetchPublicFiles();
     filesList.value = result ?? [];
   } catch (err) {
     console.error("Unable to load files:", err);
