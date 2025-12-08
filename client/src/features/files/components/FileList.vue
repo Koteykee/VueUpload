@@ -26,6 +26,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, watch, ref } from "vue";
 import { useFileStore, type IFile } from "@/stores/useFileStore";
+import { toast } from "vue3-toastify";
 
 const { filesList, isUserPage } = defineProps<{
   filesList: IFile[];
@@ -49,7 +50,12 @@ watch(
 
     for (const file of newList) {
       try {
-        const blob = await fileStore.fetchUserFilePreview(file._id);
+        let blob;
+        if (isUserPage) {
+          blob = await fileStore.fetchUserFilePreview(file._id);
+        } else {
+          blob = await fileStore.fetchPublicFilePreview(file._id);
+        }
         if (blob) {
           previews.value[file._id] = URL.createObjectURL(blob);
         }
@@ -86,6 +92,7 @@ const handleUpload = async () => {
   await fileStore.fetchUploadFile(selectedFile.value);
 
   emit("uploaded");
+  toast.success("Added successfully!");
 };
 </script>
 

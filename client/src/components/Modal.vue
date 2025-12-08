@@ -30,6 +30,7 @@ const close = () => emit("update:modelValue", false);
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .darkness {

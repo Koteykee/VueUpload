@@ -46,6 +46,7 @@ import {
   type RegistrationSchemaType,
 } from "@/features/auth/validation/registration.schema";
 import { isAxiosError } from "axios";
+import { toast } from "vue3-toastify";
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -58,8 +59,10 @@ const { errors, handleSubmit, defineField, setErrors, isSubmitting } =
 
 const onRegister = handleSubmit(async (values) => {
   try {
-    await auth.register(values);
-    router.push("/login");
+    const response = await auth.register(values);
+    router.push("/login").then(() => {
+      toast.success(response.message);
+    });
   } catch (err: any) {
     if (isAxiosError(err)) {
       const errorResponse = err.response?.data;

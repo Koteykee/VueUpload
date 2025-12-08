@@ -1,58 +1,62 @@
 <template>
   <div class="wrapper">
-    <img v-if="imageUrl" :src="imageUrl" alt="Picture" class="img" />
-    <div>
-      <div v-if="!isEditing">
-        <p>Name: {{ file.originalname }}</p>
-        <p>Private: {{ file.isPublic ? "No" : "Yes" }}</p>
-      </div>
-      <form v-else @submit.prevent="saveEdit">
-        <div>
-          <label for="name">Name: </label>
-          <input
-            v-model="name"
-            v-bind="nameAttrs"
-            id="name"
-            type="text"
-            class="input"
-          />
-          <div class="error">{{ errors.name }}</div>
-        </div>
-        <div>
-          <label for="public">Private: </label>
-          <select
-            v-model="isPublic"
-            v-bind="publicAttrs"
-            id="public"
-            class="select"
-          >
-            <option :value="true">Yes</option>
-            <option :value="false">No</option>
-          </select>
-          <div class="error">{{ errors.isPublic }}</div>
-        </div>
-        <button type="submit" class="btn save" :disabled="isDisabled">
-          Save
-        </button>
-      </form>
-      <p>Type: {{ file.mimetype }}</p>
-      <p>Size: {{ formatSize(file.size) }}</p>
-      <p>Uploaded: {{ formatDate(file.createdAt) }}</p>
-      <p>Downloads: {{ file.downloads }}</p>
+    <div v-if="imageUrl" class="img-wrapper">
+      <img :src="imageUrl" alt="Picture" class="img" />
     </div>
-    <div class="btn-wrapper">
-      <button @click="toggleEdit" class="btn edit">
-        {{ isEditing ? "Cancel" : "Edit file" }}
-      </button>
-      <button
-        @click="downloadFile(file._id, file.originalname)"
-        class="btn download"
-      >
-        Download file
-      </button>
-      <button @click="deleteFile(file._id)" class="btn delete">
-        Delete file
-      </button>
+    <div class="text-content">
+      <div>
+        <div v-if="!isEditing">
+          <p>Name: {{ file.originalname }}</p>
+          <p>Private: {{ file.isPublic ? "No" : "Yes" }}</p>
+        </div>
+        <form v-else @submit.prevent="saveEdit">
+          <div>
+            <label for="name">Name: </label>
+            <input
+              v-model="name"
+              v-bind="nameAttrs"
+              id="name"
+              type="text"
+              class="input"
+            />
+            <div class="error">{{ errors.name }}</div>
+          </div>
+          <div>
+            <label for="public">Private: </label>
+            <select
+              v-model="isPublic"
+              v-bind="publicAttrs"
+              id="public"
+              class="select"
+            >
+              <option :value="true">Yes</option>
+              <option :value="false">No</option>
+            </select>
+            <div class="error">{{ errors.isPublic }}</div>
+          </div>
+          <button type="submit" class="btn save" :disabled="isDisabled">
+            Save
+          </button>
+        </form>
+        <p>Type: {{ file.mimetype }}</p>
+        <p>Size: {{ formatSize(file.size) }}</p>
+        <p>Uploaded: {{ formatDate(file.createdAt) }}</p>
+        <p>Downloads: {{ file.downloads }}</p>
+      </div>
+      <div class="btn-wrapper">
+        <button @click="toggleEdit" class="btn edit">
+          {{ isEditing ? "Cancel" : "Edit file" }}
+        </button>
+        <button
+          @click="downloadFile(file._id, file.originalname)"
+          class="btn download"
+        >
+          Download file
+        </button>
+        <button @click="deleteFile(file._id)" class="btn delete">
+          Delete file
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -63,6 +67,7 @@ import { useFileStore, type IFile } from "@/stores/useFileStore";
 import type { PatchFile } from "@/api/file.api";
 import { useForm } from "vee-validate";
 import { editSchema } from "../validation/edit.schema";
+import { toast } from "vue3-toastify";
 
 const { file } = defineProps<{ file: IFile }>();
 const fileStore = useFileStore();
@@ -151,6 +156,7 @@ const saveEdit = handleSubmit(async (values) => {
       await fileStore.fetchPatchFile(file._id, payload);
 
       emit("uploaded");
+      toast.success("Edit successful!");
     } catch (err) {
       console.error("Unable to edit file:", err);
     }
@@ -176,6 +182,7 @@ const deleteFile = async (id: string) => {
 
     emit("uploaded");
     emit("close");
+    toast.success("Deleted successfully!");
   } catch (err) {
     console.error("Unable to delete file:", err);
   }
@@ -194,16 +201,31 @@ const isDisabled = computed(() => {
   justify-content: center;
   text-align: center;
   gap: 20px;
-  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.img-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .img {
   max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.text-content {
+  flex-shrink: 0;
 }
 
 .btn-wrapper {
   display: flex;
   gap: 20px;
+  margin-top: 10px;
 }
 
 .btn {
