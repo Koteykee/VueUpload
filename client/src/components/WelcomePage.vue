@@ -1,9 +1,11 @@
 <template>
   <Layout>
-    <h1 v-if="!auth.user" class="title">
+    <h1 v-if="!auth.user" class="text-[26px] m-5 font-bold text-center">
       Hello! Please login to upload a picture!
     </h1>
-    <h1 v-else class="title">You are logged in as {{ auth.user.email }}</h1>
+    <h1 v-else class="text-[26px] m-5 font-bold text-center">
+      You are logged in as {{ auth.user.email }}
+    </h1>
   </Layout>
 </template>
 
@@ -13,9 +15,3 @@ import Layout from "./Layout.vue";
 
 const auth = useAuthStore();
 </script>
-
-<style scoped>
-.title {
-  margin: 20px;
-}
-</style>

@@ -1,26 +1,39 @@
 <template>
-  <div class="wrapper">
-    <form @submit="onLogin">
-      <label for="email" class="label">Email</label>
+  <div class="my-5 mx-auto w-full max-w-xl">
+    <form @submit="onLogin" class="flex flex-col gap-3">
+      <label for="email" class="text-[20px]">Email</label>
       <input
         v-model="email"
         v-bind="emailAttrs"
         id="email"
         type="email"
-        class="input"
+        class="text-[18px] p-1 bg-white border"
       />
-      <div v-if="errors.email" class="error">{{ errors.email }}</div>
-      <label for="password" class="label">Password</label>
+      <div
+        v-if="errors.email"
+        class="text-[18px] text-[#E62828] first-letter:uppercase"
+      >
+        {{ errors.email }}
+      </div>
+      <label for="password" class="text-[20px]">Password</label>
       <input
         v-model="password"
         v-bind="passwordAttrs"
         id="password"
         type="password"
-        class="input"
+        class="text-[18px] p-1 bg-white border"
       />
-      <div v-if="errors.password" class="error">{{ errors.password }}</div>
-      <p v-if="error" class="error">{{ error }}</p>
-      <button type="submit" class="btn" :disabled="isDisabled">Login</button>
+      <div v-if="errors.password" class="text-[18px] text-[#E62828]">
+        {{ errors.password }}
+      </div>
+      <p v-if="error" class="text-[18px] text-[#E62828]">{{ error }}</p>
+      <button
+        type="submit"
+        class="text-[18px] p-1 cursor-pointer bg-white border"
+        :disabled="isDisabled"
+      >
+        Login
+      </button>
     </form>
   </div>
 </template>
@@ -68,40 +81,3 @@ const isDisabled = computed(() => {
   return isSubmitting.value || Object.keys(errors.value).length > 0;
 });
 </script>
-
-<style scoped>
-.wrapper {
-  margin: 20px auto;
-  width: 100%;
-  min-width: 300px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.label {
-  font-size: 20px;
-  color: black;
-}
-
-.input {
-  font-size: 18px;
-  color: black;
-  padding: 4px;
-}
-
-.error {
-  font-size: 18px;
-  color: rgb(230, 40, 40);
-}
-
-.btn {
-  font-size: 18px;
-  color: black;
-  padding: 4px;
-  cursor: pointer;
-}
-</style>

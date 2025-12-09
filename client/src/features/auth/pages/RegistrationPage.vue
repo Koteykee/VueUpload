@@ -8,5 +8,3 @@
 import Layout from "@/components/Layout.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
 </script>
-
-<style scoped></style>

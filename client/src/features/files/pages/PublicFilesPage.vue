@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <p v-if="filesList.length === 0" class="text">No files yet.</p>
+    <p v-if="filesList.length === 0" class="text-[24px] m-5">No files yet.</p>
     <FileList :filesList="filesList" :isUserPage="false" @select="openModal" />
     <Modal v-model="isModalOpen">
       <PublicFilePreview
@@ -40,10 +40,3 @@ const openModal = (file: IFile) => {
   isModalOpen.value = true;
 };
 </script>
-
-<style scoped>
-.text {
-  font-size: 24px;
-  margin: 20px;
-}
-</style>

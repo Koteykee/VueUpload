@@ -1,9 +1,15 @@
 <template>
-  <div class="wrapper">
-    <div v-if="imageUrl" class="img-wrapper">
-      <img :src="imageUrl" alt="Picture" class="img" />
+  <div
+    class="flex flex-col items-center justify-center text-center gap-5 w-full h-full overflow-hidden"
+  >
+    <div v-if="imageUrl" class="flex-1 min-h-0 overflow-hidden">
+      <img
+        :src="imageUrl"
+        alt="Picture"
+        class="max-w-full max-h-full object-contain"
+      />
     </div>
-    <div class="text-content">
+    <div class="shrink-0">
       <div>
         <div v-if="!isEditing">
           <p>Name: {{ file.originalname }}</p>
@@ -17,9 +23,9 @@
               v-bind="nameAttrs"
               id="name"
               type="text"
-              class="input"
+              class="w-[300px] p-1 bg-white border"
             />
-            <div class="error">{{ errors.name }}</div>
+            <div class="text-[#e62828] mt-1">{{ errors.name }}</div>
           </div>
           <div>
             <label for="public">Private: </label>
@@ -27,14 +33,18 @@
               v-model="isPublic"
               v-bind="publicAttrs"
               id="public"
-              class="select"
+              class="p-1 my-1 cursor-pointer bg-white border"
             >
               <option :value="true">Yes</option>
               <option :value="false">No</option>
             </select>
-            <div class="error">{{ errors.isPublic }}</div>
+            <div class="text-[#e62828] mt-1">{{ errors.isPublic }}</div>
           </div>
-          <button type="submit" class="btn save" :disabled="isDisabled">
+          <button
+            type="submit"
+            class="p-2.5 border-0 rounded-md text-[15px] cursor-pointer hover:brightness-90 disabled:brightness-70 disabled:cursor-not-allowed bg-[#78bb8f] mb-1"
+            :disabled="isDisabled"
+          >
             Save
           </button>
         </form>
@@ -43,17 +53,23 @@
         <p>Uploaded: {{ formatDate(file.createdAt) }}</p>
         <p>Downloads: {{ file.downloads }}</p>
       </div>
-      <div class="btn-wrapper">
-        <button @click="toggleEdit" class="btn edit">
+      <div class="flex gap-5 mt-2.5 justify-center">
+        <button
+          @click="toggleEdit"
+          class="p-2.5 border-0 rounded-md text-[15px] cursor-pointer hover:brightness-90 bg-[#b6c46a]"
+        >
           {{ isEditing ? "Cancel" : "Edit file" }}
         </button>
         <button
           @click="downloadFile(file._id, file.originalname)"
-          class="btn download"
+          class="p-2.5 border-0 rounded-md text-[15px] cursor-pointer hover:brightness-90 bg-[#78bb8f]"
         >
           Download file
         </button>
-        <button @click="deleteFile(file._id)" class="btn delete">
+        <button
+          @click="deleteFile(file._id)"
+          class="p-2.5 border-0 rounded-md text-[15px] cursor-pointer hover:brightness-90 bg-[#d37575]"
+        >
           Delete file
         </button>
       </div>
@@ -192,89 +208,3 @@ const isDisabled = computed(() => {
   return Object.keys(errors.value).length > 0;
 });
 </script>
-
-<style scoped>
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 20px;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.img-wrapper {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.text-content {
-  flex-shrink: 0;
-}
-
-.btn-wrapper {
-  display: flex;
-  gap: 20px;
-  margin-top: 10px;
-}
-
-.btn {
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.save {
-  background-color: #78bb8f;
-  margin-bottom: 4px;
-}
-
-.edit {
-  background-color: #b6c46a;
-}
-
-.download {
-  background-color: #78bb8f;
-}
-
-.delete {
-  background-color: #d37575;
-}
-
-.btn:hover {
-  filter: brightness(0.9);
-}
-
-.btn:disabled {
-  filter: brightness(0.7);
-  cursor: not-allowed;
-}
-
-.error {
-  color: rgb(230, 40, 40);
-  margin-top: 4px;
-}
-
-.input {
-  width: 300px;
-  padding: 4px;
-}
-
-.select {
-  padding: 4px;
-  margin: 4px 0;
-  cursor: pointer;
-}
-</style>

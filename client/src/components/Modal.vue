@@ -1,6 +1,13 @@
 <template>
-  <div v-if="modelValue" class="darkness" @click="close"></div>
-  <div v-if="modelValue" class="modal-wrapper">
+  <div
+    v-if="modelValue"
+    class="fixed top-0 left-0 w-full h-full bg-black/50 z-10"
+    @click="close"
+  ></div>
+  <div
+    v-if="modelValue"
+    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-[#D4E6BA] max-w-[80%] max-h-[90%] min-w-[40%] min-h-[50%] p-5 rounded-[10px] flex flex-col justify-center items-center"
+  >
     <slot :close="close"></slot>
   </div>
 </template>
@@ -12,34 +19,3 @@ const emit = defineEmits(["update:modelValue"]);
 
 const close = () => emit("update:modelValue", false);
 </script>
-
-<style scoped>
-.modal-wrapper {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 20;
-  background-color: rgb(212, 230, 186);
-  max-width: 80%;
-  max-height: 90%;
-  min-width: 40%;
-  min-height: 50%;
-  padding: 20px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.darkness {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 10;
-}
-</style>

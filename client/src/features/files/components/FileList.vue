@@ -1,17 +1,29 @@
 <template>
-  <ul class="container">
+  <ul class="container flex justify-center flex-wrap gap-5 list-none mx-5">
     <li
       v-for="file in filesList"
       :key="file._id"
       @click="$emit('select', file)"
-      class="file"
+      class="w-[150px] p-2.5 cursor-pointer flex flex-col items-center justify-start hover:bg-black/10"
     >
-      <div class="img-wrapper">
-        <img :src="previews[file._id]" alt="Picture" />
+      <div
+        class="w-full h-[100px] flex items-center justify-center overflow-hidden"
+      >
+        <img
+          :src="previews[file._id]"
+          alt="Picture"
+          class="max-w-full max-h-full object-contain"
+        />
       </div>
-      <p class="name">{{ file.originalname }}</p>
+      <p class="text-center whitespace-normal wrap-break-word text-[14px]">
+        {{ file.originalname }}
+      </p>
     </li>
-    <li v-if="isUserPage" class="file add-file" @click="openFileDialog">
+    <li
+      v-if="isUserPage"
+      class="cursor-pointer w-[100px] h-[100px] my-5 border-2 border-dashed border-[#8a8a8a] text-[#555] text-[16px] flex items-center justify-center hover:bg-black/10"
+      @click="openFileDialog"
+    >
       <span>Add file</span>
     </li>
   </ul>
@@ -95,64 +107,3 @@ const handleUpload = async () => {
   toast.success("Added successfully!");
 };
 </script>
-
-<style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  list-style: none;
-  margin: 0 20px;
-}
-
-.file {
-  width: 150px;
-  padding: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.file:hover,
-.add-file:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.img-wrapper {
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.img-wrapper img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.name {
-  text-align: center;
-  word-break: break-word;
-  white-space: normal;
-  overflow-wrap: break-word;
-  font-size: 14px;
-}
-
-.add-file {
-  width: 100px;
-  height: 100px;
-  margin: 20px 0;
-  border: 2px dashed #8a8a8a;
-  color: #555;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

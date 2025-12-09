@@ -1,6 +1,8 @@
 <template>
-  <div class="wrapper">
-    <img v-if="imageUrl" :src="imageUrl" alt="Picture" class="img" />
+  <div
+    class="flex flex-col items-center justify-center text-center gap-5 flex-1"
+  >
+    <img v-if="imageUrl" :src="imageUrl" alt="Picture" class="max-w-full" />
     <div>
       <p>Name: {{ file.originalname }}</p>
       <p>Private: {{ file.isPublic ? "No" : "Yes" }}</p>
@@ -11,7 +13,7 @@
     </div>
     <button
       @click="downloadFile(file._id, file.originalname)"
-      class="btn download"
+      class="p-2.5 border-0 rounded-md text-[15px] cursor-pointer hover:brightness-90 bg-[#78bb8f]"
     >
       Download file
     </button>
@@ -69,35 +71,3 @@ const downloadFile = async (id: string, filename: string) => {
   }
 };
 </script>
-
-<style scoped>
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 20px;
-  flex: 1;
-}
-
-.img {
-  max-width: 100%;
-}
-
-.btn {
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.download {
-  background-color: #78bb8f;
-}
-
-.btn:hover {
-  filter: brightness(0.9);
-}
-</style>

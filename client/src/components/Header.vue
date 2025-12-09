@@ -1,15 +1,34 @@
 <template>
-  <nav class="nav">
-    <div v-if="!auth.user" class="wrapper">
-      <router-link to="/login" class="nav-item">Login</router-link>
-      <router-link to="/registration" class="nav-item"
+  <nav class="bg-[#C1D8CA] flex justify-center">
+    <div v-if="!auth.user" class="flex gap-[50px] m-2.5">
+      <router-link
+        to="/login"
+        class="text-[26px] cursor-pointer no-underline hover:underline hover:decoration-[#497954]"
+        >Login</router-link
+      >
+      <router-link
+        to="/registration"
+        class="text-[26px] cursor-pointer no-underline hover:underline hover:decoration-[#497954]"
         >Registration</router-link
       >
     </div>
-    <div v-else class="wrapper">
-      <router-link to="/public" class="nav-item">Main Page</router-link>
-      <router-link to="/user" class="nav-item">My files</router-link>
-      <div @click="handleLogout" class="nav-item">Logout</div>
+    <div v-else class="flex gap-[50px] m-2.5">
+      <router-link
+        to="/public"
+        class="text-[26px] cursor-pointer no-underline hover:underline hover:decoration-[#497954]"
+        >Main Page</router-link
+      >
+      <router-link
+        to="/user"
+        class="text-[26px] cursor-pointer no-underline hover:underline hover:decoration-[#497954]"
+        >My files</router-link
+      >
+      <div
+        @click="handleLogout"
+        class="text-[26px] cursor-pointer no-underline hover:underline hover:decoration-[#497954]"
+      >
+        Logout
+      </div>
     </div>
   </nav>
 </template>
@@ -26,28 +45,3 @@ function handleLogout() {
   router.push("/");
 }
 </script>
-
-<style scoped>
-.nav {
-  background-color: rgb(193, 216, 202);
-  display: flex;
-  justify-content: center;
-}
-
-.wrapper {
-  display: flex;
-  gap: 50px;
-  margin: 10px;
-}
-
-.nav-item {
-  font-size: 26px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.nav-item:hover {
-  text-decoration: underline;
-  text-decoration-color: rgb(73, 121, 84);
-}
-</style>

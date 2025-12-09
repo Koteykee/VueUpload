@@ -1,26 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Molengo&display=swap");
+@import "tailwindcss";
 
-/* :root {
-  --toastify-text-color-light: #000000;
-  --toastify-color-success: rgb(112, 223, 98);
-} */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body {
   font-family: "Molengo", sans-serif;
-  color: rgb(0, 0, 0);
-}
-
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #a1ccb4;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
 }
