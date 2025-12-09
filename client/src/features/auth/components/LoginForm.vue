@@ -1,31 +1,24 @@
 <template>
   <div class="my-5 mx-auto w-full max-w-xl">
     <form @submit="onLogin" class="flex flex-col gap-3">
-      <label for="email" class="text-[20px]">Email</label>
-      <input
-        v-model="email"
-        v-bind="emailAttrs"
+      <FormField
         id="email"
         type="email"
-        class="text-[18px] p-1 bg-white border"
+        label="Email"
+        class="flex flex-col gap-3"
+        v-model="email"
+        v-bind="emailAttrs"
+        :error="errors.email"
       />
-      <div
-        v-if="errors.email"
-        class="text-[18px] text-[#E62828] first-letter:uppercase"
-      >
-        {{ errors.email }}
-      </div>
-      <label for="password" class="text-[20px]">Password</label>
-      <input
-        v-model="password"
-        v-bind="passwordAttrs"
+      <FormField
         id="password"
         type="password"
-        class="text-[18px] p-1 bg-white border"
+        label="Password"
+        class="flex flex-col gap-3"
+        v-model="password"
+        v-bind="passwordAttrs"
+        :error="errors.password"
       />
-      <div v-if="errors.password" class="text-[18px] text-[#E62828]">
-        {{ errors.password }}
-      </div>
       <p v-if="error" class="text-[18px] text-[#E62828]">{{ error }}</p>
       <button
         type="submit"
@@ -48,6 +41,8 @@ import {
   type LoginSchemaType,
 } from "@/features/auth/validation/login.schema";
 import { isAxiosError } from "axios";
+
+import FormField from "@/components/FormField.vue";
 
 const auth = useAuthStore();
 const router = useRouter();

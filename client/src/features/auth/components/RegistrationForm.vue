@@ -1,42 +1,33 @@
 <template>
   <div class="my-5 mx-auto w-full max-w-xl">
     <form @submit="onRegister" class="flex flex-col gap-3">
-      <label for="email" class="text-[20px]">Email</label>
-      <input
+      <FormField
+        id="email"
+        type="email"
+        label="Email"
+        class="flex flex-col gap-3"
         v-model="email"
         v-bind="emailAttrs"
-        type="email"
-        id="email"
-        class="text-[18px] p-1 bg-white border"
+        :error="errors.email"
       />
-      <div
-        v-if="errors.email"
-        class="text-[18px] text-[#E62828] first-letter:uppercase"
-      >
-        {{ errors.email }}
-      </div>
-      <label for="password" class="text-[20px]">Password</label>
-      <input
+      <FormField
+        id="password"
+        type="password"
+        label="Password"
+        class="flex flex-col gap-3"
         v-model="password"
         v-bind="passwordAttrs"
-        type="password"
-        id="password"
-        class="text-[18px] p-1 bg-white border"
+        :error="errors.password"
       />
-      <div v-if="errors.password" class="text-[18px] text-[#E62828]">
-        {{ errors.password }}
-      </div>
-      <label for="confirmPassword" class="text-[20px]">Confirm password</label>
-      <input
+      <FormField
+        id="confirmPassword"
+        label="Confirm password"
+        type="password"
+        class="flex flex-col gap-3"
         v-model="confirmPassword"
         v-bind="confirmPasswordAttrs"
-        type="password"
-        id="confirmPassword"
-        class="text-[18px] p-1 bg-white border"
+        :error="errors.confirmPassword"
       />
-      <div v-if="errors.confirmPassword" class="text-[18px] text-[#E62828]">
-        {{ errors.confirmPassword }}
-      </div>
       <p v-if="error" class="text-[18px] text-[#E62828]">{{ error }}</p>
       <button
         type="submit"
@@ -60,6 +51,8 @@ import {
 } from "@/features/auth/validation/registration.schema";
 import { isAxiosError } from "axios";
 import { toast } from "vue3-toastify";
+
+import FormField from "@/components/FormField.vue";
 
 const auth = useAuthStore();
 const router = useRouter();

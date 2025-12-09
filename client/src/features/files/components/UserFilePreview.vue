@@ -16,17 +16,13 @@
           <p>Private: {{ file.isPublic ? "No" : "Yes" }}</p>
         </div>
         <form v-else @submit.prevent="saveEdit">
-          <div>
-            <label for="name">Name: </label>
-            <input
-              v-model="name"
-              v-bind="nameAttrs"
-              id="name"
-              type="text"
-              class="w-[300px] p-1 bg-white border"
-            />
-            <div class="text-[#e62828] mt-1">{{ errors.name }}</div>
-          </div>
+          <FormField
+            id="name"
+            label="Email: "
+            v-model="name"
+            v-bind="nameAttrs"
+            :error="errors.name"
+          />
           <div>
             <label for="public">Private: </label>
             <select
@@ -84,6 +80,8 @@ import type { PatchFile } from "@/api/file.api";
 import { useForm } from "vee-validate";
 import { editSchema } from "../validation/edit.schema";
 import { toast } from "vue3-toastify";
+
+import FormField from "@/components/FormField.vue";
 
 const { file } = defineProps<{ file: IFile }>();
 const fileStore = useFileStore();
