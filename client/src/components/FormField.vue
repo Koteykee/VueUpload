@@ -17,7 +17,6 @@
   </div>
 </template>
 
-<!-- flex flex-col gap-3 -->
 <script setup lang="ts">
 defineOptions({
   inheritAttrs: false,
