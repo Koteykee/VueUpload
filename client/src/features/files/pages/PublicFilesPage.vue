@@ -1,6 +1,8 @@
 <template>
   <Layout>
-    <p v-if="filesList.length === 0" class="text-[24px] m-5">No files yet.</p>
+    <p v-if="filesList.length === 0" class="text-[24px] m-5 text-center">
+      No files yet.
+    </p>
     <FileList :filesList="filesList" :isUserPage="false" @select="openModal" />
     <Modal v-model="isModalOpen">
       <PublicFilePreview
