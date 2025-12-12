@@ -1,9 +1,15 @@
 <template>
   <Layout>
-    <p v-if="filesList.length === 0" class="text-[24px] m-5 text-center">
-      No files yet.
-    </p>
-    <FileList :filesList="filesList" :isUserPage="false" @select="openModal" />
+    <div class="flex flex-col items-center justify-center">
+      <p v-if="filesList.length === 0" class="text-[24px] m-5 text-center">
+        No files yet.
+      </p>
+      <FileList
+        :filesList="filesList"
+        :isUserPage="false"
+        @select="openModal"
+      />
+    </div>
     <Modal v-model="isModalOpen">
       <PublicFilePreview
         v-if="selectedFile"
